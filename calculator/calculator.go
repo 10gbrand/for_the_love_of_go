@@ -10,3 +10,8 @@ func Add(a, b float64) float64 {
 func Subtract(a, b float64) float64 {
 	return a - b
 }
+
+// Multiply takes two numbers a and b and returnes result of multiplication
+func Multiply(a, b float64) float64 {
+	return a * b
+}
