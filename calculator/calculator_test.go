@@ -2,8 +2,13 @@ package calculator_test
 
 import (
 	"calculator"
+	"math"
 	"testing"
 )
+
+func closeEnough(a, b, tolerance float64) bool {
+	return math.Abs(a-b) <= tolerance
+}
 
 func TestAdd(t *testing.T) {
 	t.Parallel()
@@ -74,15 +79,25 @@ func TestDivide(t *testing.T) {
 		{a: 4, b: 2, want: 2},
 		{a: 2, b: 2, want: 1},
 		{a: -6, b: 3, want: -2},
+		{a: 1, b: 3, want: 0.333333},
 	}
 	for _, tc := range testCases {
 		got, err := calculator.Divide(tc.a, tc.b)
 		if err != nil {
 			t.Fatalf("want no error for valid input, got %v", err)
 		}
-		if tc.want != got {
+		if !closeEnough(tc.want, got, 0.001) {
 			t.Errorf("Divide(%f, %f): want %f, got %f", tc.a, tc.b, tc.want, got)
 		}
 	}
 
+}
+
+func TestDivideInvalid(t *testing.T) {
+	t.Parallel()
+	_, err := calculator.Divide(1, 0)
+	//fmt.Printf("Error message: %v", err)
+	if err == nil {
+		t.Error("want error for invalid input, got nil")
+	}
 }
